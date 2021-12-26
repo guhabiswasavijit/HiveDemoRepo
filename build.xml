@@ -1,0 +1,50 @@
+<project name="Hive_Demo_Client" default="jar" basedir=".">
+  <description>
+    simple example build file
+  </description>
+  <property name="class-files"             value="C:\\BEELINE_HIVE\\bin" />
+  <property name="buildPath-Libraries"     value="C:\\BEELINE_HIVE\\lib"/>
+  <property name="source-dir"              value="C:\\BEELINE_HIVE\\src" />
+  <property name="RunnableMain-Class"      value="demo.HiveJdbcClient"/>
+  <property name="Built-By"                value="guhabiswas.avijit"/>
+  <property name="build" value="C:\\BEELINE_HIVE\\dist"/>
+  
+  <path id="buildLibraries">
+    <fileset dir="${buildPath-Libraries}">
+        <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <mkdir dir="${class-files}"/>
+
+    <javac srcdir="${source-dir}" destdir="${class-files}" includeantruntime="false" encoding="iso-8859-1">
+        <classpath refid="buildLibraries"/>
+    </javac>
+   </target>
+
+  <target name="jar" depends="compile">
+
+    <manifest file = "MANIFEST.MF">
+        <attribute name = "Built-By"    value = "${Built-By}"/>
+        <attribute name = "Main-Class"  value = "${RunnableMain-Class}"/>
+        <attribute name = "Class-Path"  value = "HiveJDBC41.jar HiveJDBC42.jar"/>
+    </manifest>
+
+    <jar destfile="${build}/Hive_Demo_Client.jar" basedir="${class-files}" manifest="MANIFEST.MF">
+        <fileset dir="${class-files}" includes="**/*.class" />
+        <zipgroupfileset dir="${buildPath-Libraries}" includes="**/*.jar" />
+    </jar>
+</target>
+
+  <target name="clean"
+        description="clean up">
+    <delete dir="${build}"/>
+    <delete dir="${class-files}"/>
+  </target>
+</project>
